@@ -18,7 +18,7 @@ exports.shortenUrl = async (req, res) => {
             url = new Url({ originalURL, shortURL, user });
             await url.save();
         }
-        return res.status(200).json({ shortUrl: `http://localhost:5000/api/url/${url.shortURL}` });
+        return res.status(200).json({ shortUrl: `${url.shortURL}` });
     } catch (err) {
         console.error('Error shortening URL:', err);
         return res.status(500).json({ message: 'Server Error' });
