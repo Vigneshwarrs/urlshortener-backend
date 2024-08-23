@@ -4,6 +4,8 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
+const authRoutes = require('./routes/auth');
+const urlRoutes = require('./routes/url');
 
 // Load environment variables
 dotenv.config();
@@ -17,6 +19,10 @@ mongoose
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
+
+// Routes
+app.use('/api/auth', authRoutes);
+app.use('/api/url', urlRoutes);
 
 // App listeners
 const PORT = process.env.PORT || 5000;
