@@ -28,7 +28,7 @@ exports.registerUser = async (req, res)=> {
         await sendMail({
             to: user.username,
             subject: 'Account Activation',
-            message: `Please activate your account by clicking on the following link: http://localhost:5000/api/auth/activate/${activationToken}`
+            message: `Please activate your account by clicking on the following link: https://urlshortener-backend-gyml.onrender.com/api/auth/activate/${activationToken}`
         });
         const accessToken = generateToken(user);
         
@@ -112,7 +112,7 @@ exports.forgotPassword = async (req, res)=> {
         await sendMail({
             to: user.username,
             subject: 'Password Reset',
-            message: `Please reset your password by clicking on the following link: http://localhost:3000/reset-password/${resetToken}`
+            message: `Please reset your password by clicking on the following link: https://urlshortener-fronent-gyml.netlify.app/reset-password/${resetToken}`
         });
         
         res.status(200).json({ message: 'Password reset link sent to your email.' });
