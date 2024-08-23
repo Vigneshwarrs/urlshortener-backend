@@ -6,7 +6,7 @@ const {registerUser, activateUser, loginUser, forgotPassword, resetPassword} = r
 routes.post('/register', registerUser);
 
 // Activate user route
-routes.get('/activate/:token', activateUser);
+routes.get('/activate/:activationToken', activateUser);
 
 // Login user route
 routes.post('/login', loginUser);

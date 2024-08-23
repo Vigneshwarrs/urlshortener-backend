@@ -8,7 +8,7 @@ const generateShortUrl = () => {
 exports.shortenUrl = async (req, res) => {
     const { originalURL } = req.body;
     const user = req.user._id;
-
+    console.log(user);
     try {
         // Check if the URL already exists for the user
         let url = await Url.findOne({ originalURL, user });
@@ -43,7 +43,7 @@ exports.getUserUrls = async (req, res) => {
     const userId = req.user._id;
 
     try {
-        const urls = await Url.find({ user: userId }).select('originalURL shortURL createdAt');
+        const urls = await Url.find({ user: userId }).select('originalURL shortURL');
         return res.status(200).json(urls);
     } catch (err) {
         console.error('Error retrieving user URLs:', err);

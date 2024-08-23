@@ -21,7 +21,7 @@ exports.registerUser = async (req, res)=> {
         
         // Generate a unique activation code
         const activationToken = crypto.randomBytes(32).toString('hex');
-        user.activationCode = activationToken
+        user.activationToken = activationToken;
         await user.save();
 
         //Send a Activation link
@@ -41,10 +41,10 @@ exports.registerUser = async (req, res)=> {
 
 exports.activateUser = async (req, res)=> {
     try{
-        const { activationCode } = req.params;
+        const { activationToken } = req.params;
         
         // Check if activation code is valid
-        const user = await User.findOne({ activationCode });
+        const user = await User.findOne({ activationToken });
         if (!user) {
             return res.status(404).json({ message: 'Invalid activation code.' });
         }
@@ -64,20 +64,26 @@ exports.activateUser = async (req, res)=> {
 exports.loginUser = async (req, res)=> {
     try{
         const { username, password } = req.body;
-    
-        // Check if user exists
-        const user = await User.findOne({ username });
-        if (!user || !user.comparePassword(password)) {
-            return res.status(400).json({ message: 'Invalid credentials.' });
-        }
 
+        // Check if the user exists
+        const user = await User.findOne({ username });
+        if (!user) {
+            return res.status(404).json({ message: 'User not found.' });
+        }
+        
+        // Check if password is correct
+        const isMatch = await user.comparePassword(password);
+        if (!isMatch) {
+            return res.status(401).json({ message: 'Invalid Password.' });
+        }
+        
         // Check if user is active
         if (!user.isActive) {
             return res.status(403).json({ message: 'Account not activated. Please check your email for the activation link.' });
         }
         
         const token = generateToken(user);
-        res.json({ user, token, msg: 'Logged in successfully.' });
+        res.status(200).json({ user, token, msg: 'Logged in successfully.' });
     }catch(err){
         console.error('Login Error:', err);
         res.status(500).json({ message: 'Server error.' });
@@ -106,7 +112,7 @@ exports.forgotPassword = async (req, res)=> {
         await sendMail({
             to: user.username,
             subject: 'Password Reset',
-            message: `Please reset your password by clicking on the following link: http://localhost:5000/api/auth/reset-password/${resetToken}`
+            message: `Please reset your password by clicking on the following link: http://localhost:3000/reset-password/${resetToken}`
         });
         
         res.status(200).json({ message: 'Password reset link sent to your email.' });
