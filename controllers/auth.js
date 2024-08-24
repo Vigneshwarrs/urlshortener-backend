@@ -28,7 +28,7 @@ exports.registerUser = async (req, res)=> {
         await sendMail({
             to: user.username,
             subject: 'Account Activation',
-            message: `Please activate your account by clicking on the following link: https://urlshortener-backend-gyml.onrender.com/api/auth/activate/${activationToken}`
+            message: `Please activate your account by clicking on the following link: https://urlshortener-fullstack-mern.netlify.app/activate/${activationToken}`
         });
         const accessToken = generateToken(user);
         
