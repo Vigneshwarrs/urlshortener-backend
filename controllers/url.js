@@ -43,7 +43,7 @@ exports.getUserUrls = async (req, res) => {
     const userId = req.user._id;
 
     try {
-        const urls = await Url.find({ user: userId }).select('originalURL shortURL');
+        const urls = await Url.find({ user: userId }).select('originalURL shortURL createdAt');
         return res.status(200).json(urls);
     } catch (err) {
         console.error('Error retrieving user URLs:', err);
